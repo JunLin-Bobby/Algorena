@@ -1,0 +1,19 @@
+# Editor
+.cursor/
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
+
+# Dependencies
+node_modules/
+__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Private documents
+project_docs/
