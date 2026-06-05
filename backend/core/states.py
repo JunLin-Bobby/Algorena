@@ -3,6 +3,8 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from core.events import JOIN, START, SUBMIT, VIOLATION, InboundEvent
+
 if TYPE_CHECKING:
     from core.room import Room
 
@@ -15,7 +17,7 @@ class RoomState(ABC):
         return type(self).__name__
 
     @abstractmethod
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
         """Handle one inbound event under current phase rules."""
         pass
 
@@ -39,8 +41,8 @@ class RoomState(ABC):
 class LobbyState(RoomState):
     """Waiting room. Accepts only `join`."""
 
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
-        if event != "join":
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
+        if event != JOIN:
             await self._reject(room, event)
             return
 
@@ -55,8 +57,8 @@ class LobbyState(RoomState):
 class ReadyState(RoomState):
     """Both players joined. Accepts only host `start`."""
 
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
-        if event != "start":
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
+        if event != START:
             await self._reject(room, event)
             return
 
@@ -75,8 +77,8 @@ class ReadyState(RoomState):
 class PlayingState(RoomState):
     """Active match. Accepts `submit` and `violation`."""
 
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
-        if event == "submit":
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
+        if event == SUBMIT:
             player = kwargs.get("player")
             code = kwargs.get("code")
             if not player or code is None:
@@ -84,7 +86,7 @@ class PlayingState(RoomState):
                 return
             await room.submit_code(player, code)
 
-        elif event == "violation":
+        elif event == VIOLATION:
             player = kwargs.get("player")
             if not player:
                 # violation 由前端 Page Visibility API 自動觸發，正常情況必有 player；缺則略過
@@ -98,12 +100,12 @@ class PlayingState(RoomState):
 class JudgingState(RoomState):
     """AI 評審中，拒絕所有事件"""
 
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
         await self._reject(room, event)
 
 
 class ResultState(RoomState):
     """遊戲結束，拒絕所有事件"""
 
-    async def handle(self, room: "Room", event: str, **kwargs) -> None:
+    async def handle(self, room: "Room", event: InboundEvent | str, **kwargs) -> None:
         await self._reject(room, event)

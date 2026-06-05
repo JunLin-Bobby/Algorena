@@ -1,6 +1,7 @@
 import inspect
+import typing
 
-from core import ports
+from core import events, ports
 
 
 def test_question_contract_requires_core_fields():
@@ -35,6 +36,14 @@ def test_judge_service_signature_is_stable():
 def test_question_service_signature_is_stable():
     sig = inspect.signature(ports.IQuestionService.get_random_question)
     assert sig.return_annotation is ports.QuestionPayload
+
+
+def test_inbound_events_are_literal_union():
+    assert typing.get_args(events.InboundEvent) == ("join", "start", "submit", "violation")
+    assert events.JOIN == "join"
+    assert events.START == "start"
+    assert events.SUBMIT == "submit"
+    assert events.VIOLATION == "violation"
 
 
 def test_notify_service_signature_is_stable():

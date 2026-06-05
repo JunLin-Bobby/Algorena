@@ -2,6 +2,7 @@
 
 import asyncio
 
+from core.events import InboundEvent
 from core.ports import IJudgeService, INotifyService, IQuestionService
 from core.states import JudgingState, LobbyState, PlayingState, ReadyState, ResultState
 
@@ -47,7 +48,7 @@ class Room:
     # ─────────────────────────────
     # 事件入口（WebSocket 訊息進來都走這裡）
     # ─────────────────────────────
-    async def handle(self, event: str, **kwargs):
+    async def handle(self, event: InboundEvent | str, **kwargs):
         """Single event entrypoint for websocket messages.
 
         Delegates event validation/execution to the active room state.
