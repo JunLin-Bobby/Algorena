@@ -136,7 +136,7 @@ async def test_host_start_transitions_to_playing_and_emits_game_started(room_fac
 
     assert isinstance(room.state, PlayingState)
     assert room.question is not None
-    for key in ("id", "title", "description", "starter_code"):
+    for key in ("id", "title", "description", "examples", "constraints", "starter_code"):
         assert key in room.question
     assert any(e["type"] == "game:started" for e in notify.events)
 

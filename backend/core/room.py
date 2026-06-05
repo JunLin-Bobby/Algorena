@@ -105,7 +105,15 @@ class Room:
 
     async def start_game(self):
         self.submissions = {}
-        # question contract (暫定): {"id": int, "title": str, "description": str, "starter_code": str}
+        # question contract:
+        # {
+        #   "id": int,
+        #   "title": str,
+        #   "description": str,
+        #   "examples": list[dict],
+        #   "constraints": list[str],
+        #   "starter_code": dict[str, str],
+        # }
         self.question = await self.question_service.get_random_question()
         self._validate_question_contract(self.question)
         
@@ -171,14 +179,13 @@ class Room:
         for player in self.players:
             code = self.submissions.get(player, "")
             raw = await self.judge_service.judge(question_text, code)
-            score = int(raw.get("score", 0))
+            score = float(raw.get("score", 0.0))
             penalty = self.violations.get(player, 0) * self.violation_penalty
-            final_score = max(score - penalty, 0)
+            final_score = max(score - penalty, 0.0)
             results[player] = {
                 "score": score,
                 "penalty": penalty,
                 "final_score": final_score,
-                "feedback": raw.get("feedback", ""),
             }
         return results
 
@@ -196,7 +203,14 @@ class Room:
     def _validate_question_contract(self, question: dict) -> None:
         if not isinstance(question, dict):
             raise ValueError("question must be a dict")
-        required_keys = {"id", "title", "description", "starter_code"}
+        required_keys = {
+            "id",
+            "title",
+            "description",
+            "examples",
+            "constraints",
+            "starter_code",
+        }
         missing = required_keys - question.keys()
         if missing:
             raise ValueError(f"question missing required keys: {sorted(missing)}")

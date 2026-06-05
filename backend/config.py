@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     # ─── AI 評審 ─────────────────────────────────────────
     anthropic_api_key: str | None = None
     claude_model: str = Field(validation_alias="ANTHROPIC_MODEL")
+    llm_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
+    llm_model: str = "gpt-4o-mini"
+    llm_base_url: str | None = None
+    llm_timeout_seconds: float = 20.0
+    llm_max_tokens: int = 1024
 
     # ─── 遊戲規則 ────────────────────────────────────────
     game_duration_seconds: int = 300

@@ -15,9 +15,21 @@ class StubJudge:
 
     async def judge(self, question: str, code: str) -> dict:
         self.calls.append((question, code))
-        return {"score": 0, "feedback": ""}
+        return {"score": 0.0}
 
 
 class StubQuestion:
     async def get_random_question(self) -> dict:
-        return {"id": 1, "title": "test", "description": "", "starter_code": ""}
+        return {
+            "id": 1,
+            "title": "test",
+            "description": "",
+            "examples": [
+                {"input": "x = 1", "output": "1", "explanation": None},
+            ],
+            "constraints": ["x >= 0"],
+            "starter_code": {
+                "python": "def solve():\n    pass",
+                "js": "function solve() {\n  return 0;\n}",
+            },
+        }
