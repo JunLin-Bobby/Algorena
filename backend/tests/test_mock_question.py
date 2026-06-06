@@ -8,6 +8,7 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
+# MockQuestionService 回傳的題目應符合 QuestionPayload 必要欄位。
 @pytest.mark.anyio
 async def test_get_random_question_returns_required_contract_keys():
     service = MockQuestionService()
@@ -27,6 +28,7 @@ async def test_get_random_question_returns_required_contract_keys():
     assert isinstance(question["starter_code"], dict)
 
 
+# MockQuestionService 應從注入的題庫中隨機選題。
 @pytest.mark.anyio
 async def test_get_random_question_comes_from_seed_bank():
     custom_bank = [
@@ -68,6 +70,7 @@ async def test_get_random_question_comes_from_seed_bank():
     assert question in custom_bank
 
 
+# 空題庫應在初始化時拋錯。
 def test_empty_question_bank_raises_error():
     with pytest.raises(ValueError, match="questions must not be empty"):
         MockQuestionService(questions=[])

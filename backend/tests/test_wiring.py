@@ -8,6 +8,7 @@ from config import Settings
 from wiring import build_app_dependencies, build_judge_service, build_room
 
 
+# JUDGE_MODE=mock 時應組裝 MockJudgeService。
 def test_build_judge_service_uses_mock_when_mode_is_mock():
     settings = Settings(judge_mode="mock", llm_api_key=None)
 
@@ -16,6 +17,7 @@ def test_build_judge_service_uses_mock_when_mode_is_mock():
     assert isinstance(judge, MockJudgeService)
 
 
+# JUDGE_MODE=llm 且有 API key 時應組裝 LLMJudgeService。
 def test_build_judge_service_uses_llm_when_mode_is_llm_and_key_present():
     settings = Settings(
         judge_mode="llm",
@@ -28,6 +30,7 @@ def test_build_judge_service_uses_llm_when_mode_is_llm_and_key_present():
     assert isinstance(judge, LLMJudgeService)
 
 
+# JUDGE_MODE=llm 但缺 LLM_API_KEY 時應拋錯。
 def test_build_judge_service_rejects_llm_mode_without_api_key():
     settings = Settings(judge_mode="llm", llm_api_key=None)
 
@@ -35,6 +38,7 @@ def test_build_judge_service_rejects_llm_mode_without_api_key():
         build_judge_service(settings)
 
 
+# build_app_dependencies 應正確組裝 judge、question、notify 與 ConnectionManager。
 def test_build_app_dependencies_wires_notify_and_question_services():
     settings = Settings(judge_mode="mock")
 
@@ -46,6 +50,7 @@ def test_build_app_dependencies_wires_notify_and_question_services():
     assert deps.connection_manager is not None
 
 
+# build_room 應把 deps 與 settings 遊戲規則注入 Room。
 def test_build_room_injects_dependencies_from_settings():
     settings = Settings(
         judge_mode="mock",

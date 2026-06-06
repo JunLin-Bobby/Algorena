@@ -34,6 +34,7 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
+# 有效 JSON 回應應正規化為 score 與 feedback，並使用 json_object 格式。
 @pytest.mark.anyio
 async def test_llm_judge_returns_normalized_result_from_valid_json():
     client = FakeOpenAIClient(text='{"score": 8.7, "feedback": "Looks good."}')
@@ -51,6 +52,7 @@ async def test_llm_judge_returns_normalized_result_from_valid_json():
     assert client.completions_api.last_kwargs["max_tokens"] == 1024
 
 
+# 分數應被限制在 0–10 區間。
 @pytest.mark.anyio
 async def test_llm_judge_clamps_score_to_0_10():
     client = FakeOpenAIClient(text='{"score": 999, "feedback": "Too high."}')
@@ -66,6 +68,7 @@ async def test_llm_judge_clamps_score_to_0_10():
     assert result["feedback"] == "Too high."
 
 
+# 無法解析的回應應回傳 fallback 結果（score 0 + 錯誤說明）。
 @pytest.mark.anyio
 async def test_llm_judge_returns_fallback_on_malformed_json():
     client = FakeOpenAIClient(text="not-json")
@@ -81,6 +84,7 @@ async def test_llm_judge_returns_fallback_on_malformed_json():
     assert "failed to parse judge result" in result["feedback"]
 
 
+# 應能解析 markdown code block 包住的 JSON。
 @pytest.mark.anyio
 async def test_llm_judge_parses_json_in_markdown_codeblock():
     client = FakeOpenAIClient(
@@ -97,6 +101,7 @@ async def test_llm_judge_parses_json_in_markdown_codeblock():
     assert result == {"score": 8.5, "feedback": "Solid submission."}
 
 
+# API 呼叫失敗時應回傳 fallback 結果，不向外拋錯。
 @pytest.mark.anyio
 async def test_llm_judge_returns_fallback_on_client_error():
     client = FakeOpenAIClient(error=RuntimeError("network down"))

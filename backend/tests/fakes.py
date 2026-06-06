@@ -1,6 +1,16 @@
 """In-memory test doubles for core ports."""
 
 
+class FakeWebSocket:
+    """測試用 WebSocket 替身；send_json 被呼叫時把 payload 記錄到 sent。"""
+
+    def __init__(self) -> None:
+        self.sent: list[dict] = []
+
+    async def send_json(self, data: dict) -> None:
+        self.sent.append(data)
+
+
 class RecordingNotify:
     def __init__(self) -> None:
         self.events: list[dict] = []

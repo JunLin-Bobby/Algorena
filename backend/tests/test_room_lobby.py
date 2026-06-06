@@ -55,11 +55,13 @@ def room_with_refs(room_factory):
     return room, judge, notify
 
 
+# 新建 Room 應從 LobbyState 開始。
 def test_room_starts_in_lobby_state(room_factory):
     room, _ = room_factory()
     assert isinstance(room.state, LobbyState)
 
 
+# Room 應保存注入的遊戲規則設定。
 def test_room_stores_injected_game_rules(room_factory):
     room, _ = room_factory(
         max_players=2,
@@ -71,6 +73,7 @@ def test_room_stores_injected_game_rules(room_factory):
     assert room.violation_penalty == 10
 
 
+# 第一位玩家 join 應加入名單並廣播 player:joined。
 @pytest.mark.anyio
 async def test_first_join_adds_player_and_notifies(room_factory):
     room, notify = room_factory()
@@ -82,6 +85,7 @@ async def test_first_join_adds_player_and_notifies(room_factory):
     assert any(e["type"] == "player:joined" for e in notify.events)
 
 
+# 第二位玩家 join 後人數滿員應切換到 ReadyState。
 @pytest.mark.anyio
 async def test_second_join_transitions_to_ready(room_factory):
     room, notify = room_factory()
@@ -96,6 +100,7 @@ async def test_second_join_transitions_to_ready(room_factory):
     )
 
 
+# 重複 join 應回傳 DUPLICATE_PLAYER 錯誤。
 @pytest.mark.anyio
 async def test_duplicate_join_returns_error(room_factory):
     room, notify = room_factory()
@@ -110,12 +115,12 @@ async def test_duplicate_join_returns_error(room_factory):
     )
 
 
+# 房間滿員後再加入應回傳 ROOM_FULL 錯誤。
 @pytest.mark.anyio
 async def test_room_full_returns_error(room_factory):
     room, notify = room_factory()
     await room.handle("join", player="alice")
     await room.handle("join", player="bob")
-    # 房間已滿且處於 ReadyState；add_player 仍應回 ROOM_FULL
     await room.add_player("charlie")
 
     assert room.players == ["alice", "bob"]
@@ -126,6 +131,7 @@ async def test_room_full_returns_error(room_factory):
     )
 
 
+# 房主 start 應切換到 PlayingState 並廣播 game:started。
 @pytest.mark.anyio
 async def test_host_start_transitions_to_playing_and_emits_game_started(room_factory):
     room, notify = room_factory(game_duration_seconds=60)
@@ -141,6 +147,7 @@ async def test_host_start_transitions_to_playing_and_emits_game_started(room_fac
     assert any(e["type"] == "game:started" for e in notify.events)
 
 
+# 題目 contract 不完整時 start_game 應拋 ValueError 且維持 ReadyState。
 @pytest.mark.anyio
 async def test_start_game_rejects_invalid_question_contract():
     notify = RecordingNotify()
@@ -162,6 +169,7 @@ async def test_start_game_rejects_invalid_question_contract():
     assert isinstance(room.state, ReadyState)
 
 
+# submit 應把玩家程式碼存入 submissions。
 @pytest.mark.anyio
 async def test_submit_stores_player_code(room_factory):
     room, _ = room_factory(game_duration_seconds=60)
@@ -174,6 +182,7 @@ async def test_submit_stores_player_code(room_factory):
     assert room.submissions["alice"] == "print('hi')"
 
 
+# violation 應累加該玩家的違規次數。
 @pytest.mark.anyio
 async def test_violation_increments_player_count(room_factory):
     room, _ = room_factory(game_duration_seconds=60)
@@ -186,6 +195,7 @@ async def test_violation_increments_player_count(room_factory):
     assert room.violations["alice"] == 1
 
 
+# 雙方皆提交後應結算遊戲、呼叫 judge 並廣播 game:result。
 @pytest.mark.anyio
 async def test_both_submissions_finalize_game_and_emit_result(room_with_refs):
     room, judge, notify = room_with_refs

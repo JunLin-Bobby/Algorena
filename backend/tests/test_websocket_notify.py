@@ -2,16 +2,7 @@ import pytest
 
 from adapters.websocket_notify import WebSocketNotifyService
 from manager import ConnectionManager
-
-
-class FakeWebSocket:
-    """測試用 WebSocket 替身；send_json 被呼叫時把 payload 記錄到 sent。"""
-
-    def __init__(self) -> None:
-        self.sent: list[dict] = []
-
-    async def send_json(self, data: dict) -> None:
-        self.sent.append(data)
+from tests.fakes import FakeWebSocket
 
 
 @pytest.fixture

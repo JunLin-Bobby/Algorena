@@ -8,6 +8,7 @@ def anyio_backend() -> str:
     return "asyncio"
 
 
+# MockJudgeService 預設應回傳固定 score 與 feedback。
 @pytest.mark.anyio
 async def test_mock_judge_returns_fixed_score_and_feedback():
     judge = MockJudgeService()
@@ -20,6 +21,7 @@ async def test_mock_judge_returns_fixed_score_and_feedback():
     }
 
 
+# MockJudgeService 應支援自訂固定評分結果。
 @pytest.mark.anyio
 async def test_mock_judge_supports_custom_fixed_result():
     judge = MockJudgeService(score=9.5, feedback="Great job from mock judge.")
