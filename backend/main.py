@@ -1,12 +1,18 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
-# Phase 4: from config import get_settings
-# settings = get_settings()
-# Room(..., max_players=settings.max_players,
-#      game_duration_seconds=settings.game_duration_seconds,
-#      violation_penalty=settings.violation_penalty)
+from config import get_settings
+from wiring import build_app_dependencies
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app.state.deps = build_app_dependencies(get_settings())
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")

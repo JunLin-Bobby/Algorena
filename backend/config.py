@@ -3,8 +3,12 @@
 from functools import lru_cache
 from pathlib import Path
 
+from typing import Literal
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+JudgeMode = Literal["mock", "llm"]
 
 # config.py 所在目錄（backend/），作為相對路徑的基準，不受執行時 cwd 影響
 # 預設 SQLite 檔案放在 backend/ 下，方便開發時與程式碼同層管理
@@ -19,15 +23,15 @@ class Settings(BaseSettings):
         env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",
         extra="ignore",
+        populate_by_name=True,
     )
 
     # ─── 資料庫 ──────────────────────────────────────────
     database_url: str = DEFAULT_DATABASE_URL
 
-    # ─── AI 評審 ─────────────────────────────────────────
-    anthropic_api_key: str | None = None
-    claude_model: str = Field(validation_alias="ANTHROPIC_MODEL")
-    llm_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
+    # ─── AI 評審（LLMJudgeService via OpenAI-compatible API）────
+    judge_mode: JudgeMode = Field(default="mock", validation_alias="JUDGE_MODE")
+    llm_api_key: str | None = None
     llm_model: str = "gpt-4o-mini"
     llm_base_url: str | None = None
     llm_timeout_seconds: float = 20.0
