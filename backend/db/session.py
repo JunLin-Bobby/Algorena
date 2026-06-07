@@ -35,5 +35,8 @@ async def get_session(
 
 
 async def init_db(engine: AsyncEngine) -> None:
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    """Apply Alembic migrations to the database behind ``engine``."""
+    from db.migrate import upgrade_head
+
+    database_url = engine.url.render_as_string(hide_password=False)
+    upgrade_head(database_url)

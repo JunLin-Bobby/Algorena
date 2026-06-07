@@ -5,9 +5,9 @@ from sqlalchemy import text
 
 from config import Settings
 from db import create_engine, create_session_factory, get_session, init_db
+from db.migrate import file_database_url
 
 IN_MEMORY_URL = "sqlite+aiosqlite:///:memory:"
-
 
 @pytest.fixture
 def anyio_backend() -> str:
@@ -27,10 +27,10 @@ async def test_get_session_executes_query_on_in_memory_db():
         await engine.dispose()
 
 
-# init_db 在尚無 ORM models 時仍應可安全執行 create_all。
+# init_db 應透過 Alembic 建表（temp file DB）。
 @pytest.mark.anyio
-async def test_init_db_runs_without_error_on_empty_metadata():
-    engine = create_engine(IN_MEMORY_URL)
+async def test_init_db_runs_migrations_without_error(tmp_path: Path):
+    engine = create_engine(file_database_url(tmp_path / "init.db"))
     try:
         await init_db(engine)
     finally:
