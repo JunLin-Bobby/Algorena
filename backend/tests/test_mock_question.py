@@ -18,6 +18,7 @@ async def test_get_random_question_returns_required_contract_keys():
     assert set(question.keys()) == {
         "id",
         "title",
+        "difficulty",
         "description",
         "examples",
         "constraints",
@@ -35,6 +36,7 @@ async def test_get_random_question_comes_from_seed_bank():
         {
             "id": 101,
             "title": "Two Sum",
+            "difficulty": "easy",
             "description": "Return indices of two numbers that add up to target.",
             "examples": [
                 {
@@ -52,6 +54,7 @@ async def test_get_random_question_comes_from_seed_bank():
         {
             "id": 102,
             "title": "Valid Parentheses",
+            "difficulty": "medium",
             "description": "Validate bracket sequence.",
             "examples": [
                 {"input": 's = "()"', "output": "true", "explanation": None}

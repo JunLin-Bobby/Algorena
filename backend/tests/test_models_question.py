@@ -8,6 +8,7 @@ from db.models import Question
 SAMPLE_QUESTION = {
     "id": 1,
     "title": "Two Sum",
+    "difficulty": "easy",
     "description": "Return indices of two numbers that add up to target.",
     "examples": [
         {
@@ -47,6 +48,7 @@ async def test_init_db_creates_questions_table_and_persists_row(tmp_path: Path):
             question = result.scalar_one()
 
             assert question.title == SAMPLE_QUESTION["title"]
+            assert question.difficulty == SAMPLE_QUESTION["difficulty"]
             assert question.description == SAMPLE_QUESTION["description"]
             assert question.examples == SAMPLE_QUESTION["examples"]
             assert question.constraints == SAMPLE_QUESTION["constraints"]
@@ -62,6 +64,7 @@ def test_question_maps_to_questions_table_with_contract_columns():
     assert column_names == {
         "id",
         "title",
+        "difficulty",
         "description",
         "examples",
         "constraints",

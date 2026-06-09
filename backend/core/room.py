@@ -207,6 +207,7 @@ class Room:
         required_keys = {
             "id",
             "title",
+            "difficulty",
             "description",
             "examples",
             "constraints",

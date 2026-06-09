@@ -1,10 +1,23 @@
 # Phase 3 — 資料層（SQLite 題庫）
 
 目標：**題庫**可持久化；房間與對戰狀態維持在記憶體。每個 step 對應一個小 PR。  
-Core（`Room` / `states`）與 Phase 2 adapter 在此階段**不修改**。
+Core（`Room` / `states`）與 Phase 2 adapter 原則上不修改；**例外**：Step 3-6.5 擴充 `QuestionPayload`（加 `difficulty`）時需更新 `Room._validate_question_contract`。
 
-資料層程式碼集中於 **`db/`** package（`session`、`models`、`schemas`、`repositories/`）。  
+資料層程式碼集中於 **`db/`** package（`session`、`models`、`schemas`、`repositories/`、`seed`）。  
 **Schema 變更以 Alembic migration 管理**，不用 `create_all` 作為正式建表方式。
+
+### 題庫管理策略（Step 3-6.5 / 3-7 設計決策）
+
+| 項目 | 決定 |
+|------|------|
+| 題目來源 | 單檔 `backend/data/questions.yaml`（Git 管版本） |
+| `difficulty` | 納入 `QuestionPayload`，`game:started` 廣播；`Literal["easy", "medium", "hard"]` |
+| 同步時機 | App startup（`main.py` lifespan） |
+| Upsert 識別 | **`id`**（非 `title`；改 title 仍 UPDATE 同一列） |
+| 刪題 | Startup **prune** — 刪掉 YAML 未列出的 id |
+| 版本控制 | Git only（不加 `version` / `is_active` / event log） |
+| Seed 模組 | `db/seed.py` + Pydantic `QuestionSeed` 驗證 YAML |
+| 暫不做 | 分檔 YAML、CI sync、`scripts/` CLI |
 
 ### 不在 Phase 3 範圍
 
@@ -72,19 +85,45 @@ REST / API 用的 Pydantic 模型，與 ORM 分離。
 
 ---
 
-# Step 3-7：種子題目 seed
+# Step 3-6.5：擴充 Question 契約（difficulty） ✅
 
-- 來源：`adapters/mock_question.py` 的 `DEFAULT_QUESTIONS`
-- 實作：`scripts/seed_questions.py` 或 startup hook（擇一，避免重複 seed）
-- 前置：目標 DB 已 `alembic upgrade head`
-- 驗收：執行 seed 後 `question_repository.list_all()` 非空
+- `core.ports.QuestionPayload` 加 `difficulty: Literal["easy", "medium", "hard"]`
+- `db.models.Question`、`db.schemas.QuestionRead` 對齊
+- Alembic migration：`questions` 表加 `difficulty TEXT NOT NULL`
+- `core.room.Room._validate_question_contract` `required_keys` 加 `"difficulty"`
+- 更新 `docs/data_contract.md`、`docs/protocol.md`（`game:started.question`）
+- `DEFAULT_QUESTIONS` / 相關測試補 `difficulty`
+- 驗收：`test_ports_contract`、`test_schemas_question`、`test_models_question` 通過
+
+---
+
+# Step 3-7：題庫 YAML + startup seed
+
+- 依賴：`pyyaml`（加入 `pyproject.toml`）
+- 題目檔：`backend/data/questions.yaml`（從 `DEFAULT_QUESTIONS` 搬移並補 `difficulty`）
+- 實作：`db/seed.py`
+  - `load_questions_from_yaml()` — Pydantic `QuestionSeed` 驗證；id 不可重複
+  - `seed_questions(session_factory)` — **upsert by `id`** + **prune**（刪 YAML 未列 id）
+  - 空 YAML 防護：`questions: []` 時 skip prune、log warning（避免刪光題庫）
+- 啟動：`main.py` lifespan — `init_db` → `seed_questions` → `build_app_dependencies`；`engine` / `session_factory` 掛 `app.state`
+- 驗收：`tests/test_seed.py`（insert / update / prune / idempotent / duplicate id / empty yaml）
+
+### Seed 行為摘要
+
+| 情境 | 結果 |
+|------|------|
+| 第一次啟動，YAML 10 題 | 10 × INSERT |
+| YAML 增至 20 題 | id 1–10 UPDATE，11–20 INSERT |
+| YAML 改 title（id 不變） | UPDATE 同一列 |
+| YAML 拿掉某 id | startup 後 DELETE 該列 |
+| 相同 YAML 跑兩次 | 冪等 |
 
 ---
 
 # Step 3-8：整合驗收測試
 
 - pytest：migration → seed → 新 session 仍可 `list_all` / `get_random`
-- 驗收：Phase 3 完成標準——**重啟 / 新 session 後題庫仍可查詢**
+- 驗收：Phase 3 完成標準——**重啟 / 新 session 後題庫仍可查詢，且與 YAML 一致**
 
 ---
 
@@ -93,4 +132,4 @@ REST / API 用的 Pydantic 模型，與 ORM 分離。
 - `IQuestionService` 改接 DB `question_repository`
 - `POST /rooms` 建立 in-memory `Room`（不寫 DB）
 - 斷線重連邏輯擴充 `ConnectionManager` / room registry
-- 部署流程：`alembic upgrade head` →（可選）seed → 啟動 API
+- 部署流程：啟動 app（lifespan 內 `alembic upgrade head` + seed）；改題目 = 編輯 YAML → commit → restart

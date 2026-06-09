@@ -28,6 +28,7 @@ ORM 表名：`questions`
 |---|---|---|---|---|
 | `id` | `INTEGER` PK | `id: int` | ✓ | 題庫唯一 ID；seed 與 `get_by_id` 用 |
 | `title` | `TEXT` | `title: str` | ✓ | |
+| `difficulty` | `TEXT` | `difficulty: Literal["easy", "medium", "hard"]` | ✓ | 難度；`game:started` 廣播 |
 | `description` | `TEXT` | `description: str` | ✓ | AI 評分主要依據 |
 | `examples` | `JSON` | `examples: list[ExampleCase]` | ✓ | 見下方 JSON schema |
 | `constraints` | `JSON` | `constraints: list[str]` | ✓ | 字串陣列 |

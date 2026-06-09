@@ -52,7 +52,15 @@ async def test_integration_emits_game_started_with_question_and_duration(wired_r
     event = started_events[0]
     assert event["duration_seconds"] == 120
     question = event["question"]
-    for key in ("id", "title", "description", "examples", "constraints", "starter_code"):
+    for key in (
+        "id",
+        "title",
+        "difficulty",
+        "description",
+        "examples",
+        "constraints",
+        "starter_code",
+    ):
         assert key in question
 
 

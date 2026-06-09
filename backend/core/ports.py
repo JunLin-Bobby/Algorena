@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import TypedDict
+from typing import Literal, TypedDict
+
+Difficulty = Literal["easy", "medium", "hard"]
 
 
 class ExampleCase(TypedDict):
@@ -11,6 +13,7 @@ class ExampleCase(TypedDict):
 class QuestionPayload(TypedDict):
     id: int
     title: str
+    difficulty: Difficulty
     description: str
     examples: list[ExampleCase]
     constraints: list[str]

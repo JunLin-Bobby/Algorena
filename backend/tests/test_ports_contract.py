@@ -10,6 +10,7 @@ def test_question_contract_requires_core_fields():
     assert {
         "id",
         "title",
+        "difficulty",
         "description",
         "examples",
         "constraints",

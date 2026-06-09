@@ -1,5 +1,7 @@
 """Pydantic schemas for DB/API boundaries (ORM separate from wire formats)."""
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -14,6 +16,7 @@ class QuestionRead(BaseModel):
 
     id: int
     title: str
+    difficulty: Literal["easy", "medium", "hard"]
     description: str
     examples: list[ExampleCaseRead]
     constraints: list[str]

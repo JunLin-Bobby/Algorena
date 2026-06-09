@@ -10,6 +10,7 @@ from db.models import Question
 SAMPLE_QUESTION = {
     "id": 1,
     "title": "Two Sum",
+    "difficulty": "easy",
     "description": "Return indices of two numbers that add up to target.",
     "examples": [{"input": "x", "output": "y", "explanation": None}],
     "constraints": ["n >= 1"],
@@ -33,6 +34,17 @@ def _table_names(database_url: str) -> set[str]:
         engine.dispose()
 
 
+def _column_names(database_url: str, table: str) -> set[str]:
+    from sqlalchemy import create_engine as create_sync_engine
+
+    engine = create_sync_engine(to_sync_database_url(database_url))
+    try:
+        with engine.connect() as conn:
+            return {column["name"] for column in inspect(conn).get_columns(table)}
+    finally:
+        engine.dispose()
+
+
 # 空 DB 執行 upgrade head 後應有 questions 表。
 def test_upgrade_head_creates_questions_table(tmp_path: Path):
     database_url = file_database_url(tmp_path / "migrate.db")
@@ -42,12 +54,25 @@ def test_upgrade_head_creates_questions_table(tmp_path: Path):
     assert "questions" in _table_names(database_url)
 
 
-# downgrade -1 應移除 questions 表。
-def test_downgrade_one_drops_questions_table(tmp_path: Path):
+# downgrade -1 應移除 difficulty 欄位，questions 表仍存在。
+def test_downgrade_one_drops_difficulty_column(tmp_path: Path):
     database_url = file_database_url(tmp_path / "migrate.db")
 
     upgrade_head(database_url)
+    assert "difficulty" in _column_names(database_url, "questions")
+
     downgrade("-1", database_url)
+
+    assert "questions" in _table_names(database_url)
+    assert "difficulty" not in _column_names(database_url, "questions")
+
+
+# downgrade base 應移除 questions 表。
+def test_downgrade_to_base_drops_questions_table(tmp_path: Path):
+    database_url = file_database_url(tmp_path / "migrate.db")
+
+    upgrade_head(database_url)
+    downgrade("base", database_url)
 
     assert "questions" not in _table_names(database_url)
 

@@ -9,6 +9,7 @@ DEFAULT_QUESTIONS: list[QuestionPayload] = [
     {
         "id": 1,
         "title": "Two Sum",
+        "difficulty": "easy",
         "description": "Return indices of two numbers that add up to target.",
         "examples": [
             {
@@ -26,6 +27,7 @@ DEFAULT_QUESTIONS: list[QuestionPayload] = [
     {
         "id": 2,
         "title": "Valid Parentheses",
+        "difficulty": "easy",
         "description": "Determine whether the input string has valid brackets.",
         "examples": [
             {
@@ -43,6 +45,7 @@ DEFAULT_QUESTIONS: list[QuestionPayload] = [
     {
         "id": 3,
         "title": "Longest Common Prefix",
+        "difficulty": "medium",
         "description": "Find the longest common prefix among a list of strings.",
         "examples": [
             {

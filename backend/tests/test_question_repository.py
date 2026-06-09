@@ -11,6 +11,7 @@ from db.repositories.question_repository import QuestionRepository
 QUESTION_ONE = {
     "id": 1,
     "title": "Two Sum",
+    "difficulty": "easy",
     "description": "Return indices of two numbers that add up to target.",
     "examples": [
         {
@@ -26,6 +27,7 @@ QUESTION_ONE = {
 QUESTION_TWO = {
     "id": 2,
     "title": "Valid Parentheses",
+    "difficulty": "medium",
     "description": "Determine whether the input string has valid brackets.",
     "examples": [{"input": 's = "()[]{}"', "output": "true", "explanation": None}],
     "constraints": ["1 <= len(s) <= 10^4"],

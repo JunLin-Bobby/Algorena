@@ -3,6 +3,7 @@ from db.models import Question
 SAMPLE_QUESTION = {
     "id": 1,
     "title": "Two Sum",
+    "difficulty": "easy",
     "description": "Return indices of two numbers that add up to target.",
     "examples": [
         {
@@ -29,6 +30,7 @@ def test_question_read_model_validate_from_orm():
 
     assert read.id == SAMPLE_QUESTION["id"]
     assert read.title == SAMPLE_QUESTION["title"]
+    assert read.difficulty == SAMPLE_QUESTION["difficulty"]
     assert read.description == SAMPLE_QUESTION["description"]
     assert read.examples[0].model_dump() == SAMPLE_QUESTION["examples"][0]
     assert read.constraints == SAMPLE_QUESTION["constraints"]

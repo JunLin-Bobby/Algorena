@@ -33,6 +33,7 @@ class StubQuestion:
         return {
             "id": 1,
             "title": "test",
+            "difficulty": "easy",
             "description": "",
             "examples": [
                 {"input": "x = 1", "output": "1", "explanation": None},

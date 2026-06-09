@@ -132,6 +132,7 @@
   "question": {
     "id": 1,
     "title": "Two Sum",
+    "difficulty": "easy",
     "description": "Return indices of two numbers that add up to target.",
     "examples": [
       {
@@ -156,6 +157,7 @@
 |---|---|---|
 | `id` | int | 題目唯一 ID |
 | `title` | str | 題目標題 |
+| `difficulty` | str | `easy` \| `medium` \| `hard` |
 | `description` | str | 題目描述（評分主要依據） |
 | `examples` | list | 每筆含 `input`、`output`、`explanation`（可為 null） |
 | `constraints` | list[str] | 題目限制條件 |

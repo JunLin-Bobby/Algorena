@@ -11,6 +11,7 @@ class Question(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(Text, nullable=False)
+    difficulty: Mapped[str] = mapped_column(Text, nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     examples: Mapped[list] = mapped_column(JSON, nullable=False)
     constraints: Mapped[list] = mapped_column(JSON, nullable=False)
