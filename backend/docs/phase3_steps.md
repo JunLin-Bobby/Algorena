@@ -54,7 +54,7 @@ Core（`Room` / `states`）與 Phase 2 adapter 在此階段**不修改**。
 
 ---
 
-# Step 3-5：做 db/schemas.py
+# Step 3-5：做 db/schemas.py ✅
 
 REST / API 用的 Pydantic 模型，與 ORM 分離。
 
@@ -64,7 +64,7 @@ REST / API 用的 Pydantic 模型，與 ORM 分離。
 
 ---
 
-# Step 3-6：做 question_repository
+# Step 3-6：做 question_repository ✅
 
 - `db/repositories/question_repository.py`
 - 至少：`get_by_id`、`list_all`、`get_random`（或 `pick_random`）
