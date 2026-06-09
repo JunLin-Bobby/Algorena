@@ -1,0 +1,7 @@
+[startup] 1/5 create_engine
+[startup] 2/5 init_db (alembic)
+[startup] 3/5 create_session_factory
+[startup] 4/5 seed_questions
+[startup] 5/5 build_app_dependencies
+[startup] ready
+INFO:     127.0.0.1:7737 - "GET / HTTP/1.1" 200 OK

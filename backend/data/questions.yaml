@@ -1,0 +1,614 @@
+# Algorena 題庫 — Git 為唯一來源，startup seed 會 upsert 進 SQLite
+#
+# 欄位說明（對齊 QuestionPayload）：
+#   id          必填，整數，全檔唯一；seed 用 id 判斷新增或更新
+#   title       必填，題目標題
+#   difficulty  必填，easy | medium | hard
+#   description 必填，題目描述（可多行，用 |）
+#   examples    必填，至少一筆；每筆含 input、output；explanation 可省略或 null
+#   constraints 必填，字串陣列
+#   starter_code 必填，語言代碼 → 初始程式碼（python、js 等）
+
+questions:
+
+  # ── Array ────────────────────────────────────────────────────
+
+  - id: 1
+    title: Two Sum
+    difficulty: easy
+    description: |
+      給定一個整數陣列 nums 與一個目標值 target，
+      回傳兩個數字的索引，使它們相加等於 target。
+      每道題保證恰好有一組解，且不可重複使用同一個元素。
+    examples:
+      - input: "nums = [2,7,11,15], target = 9"
+        output: "[0,1]"
+        explanation: "nums[0] + nums[1] = 2 + 7 = 9"
+      - input: "nums = [3,2,4], target = 6"
+        output: "[1,2]"
+        explanation: null
+    constraints:
+      - "2 <= len(nums) <= 10^4"
+      - "-10^9 <= nums[i] <= 10^9"
+      - "只有一組有效答案"
+    starter_code:
+      python: |
+        def solve(nums, target):
+            pass
+      js: |
+        function solve(nums, target) {
+          return [];
+        }
+
+  - id: 2
+    title: Valid Parentheses
+    difficulty: easy
+    description: |
+      判斷輸入字串中的括號是否合法。
+      合法括號需依序正確地開啟與關閉，且對應的括號類型需一致。
+    examples:
+      - input: 's = "()[]{}"'
+        output: "true"
+        explanation: null
+      - input: 's = "([)]"'
+        output: "false"
+        explanation: "括號交錯，不合法"
+    constraints:
+      - "1 <= len(s) <= 10^4"
+      - "s 只包含 ()[]{}"
+    starter_code:
+      python: |
+        def solve(s):
+            pass
+      js: |
+        function solve(s) {
+          return true;
+        }
+
+  - id: 3
+    title: Longest Common Prefix
+    difficulty: easy
+    description: |
+      在字串陣列中找出最長公共前綴。
+      若不存在任何公共前綴，回傳空字串 ""。
+    examples:
+      - input: 'strs = ["flower","flow","flight"]'
+        output: '"fl"'
+        explanation: '"fl" 是所有字串的公共前綴'
+      - input: 'strs = ["dog","racecar","car"]'
+        output: '""'
+        explanation: "三個字串沒有公共前綴"
+    constraints:
+      - "1 <= len(strs) <= 200"
+      - "0 <= len(strs[i]) <= 200"
+      - "strs[i] 只包含小寫英文字母"
+    starter_code:
+      python: |
+        def solve(strs):
+            pass
+      js: |
+        function solve(strs) {
+          return '';
+        }
+
+  - id: 4
+    title: Best Time to Buy and Sell Stock
+    difficulty: easy
+    description: |
+      給定陣列 prices，prices[i] 代表第 i 天的股票價格。
+      你只能在某一天買入，並在之後某一天賣出，求最大利潤。
+      若無法獲利，回傳 0。
+    examples:
+      - input: "prices = [7,1,5,3,6,4]"
+        output: "5"
+        explanation: "第 2 天買（價格 1），第 5 天賣（價格 6），利潤 = 5"
+      - input: "prices = [7,6,4,3,1]"
+        output: "0"
+        explanation: "價格持續下降，無法獲利"
+    constraints:
+      - "1 <= len(prices) <= 10^5"
+      - "0 <= prices[i] <= 10^4"
+    starter_code:
+      python: |
+        def solve(prices):
+            pass
+      js: |
+        function solve(prices) {
+          return 0;
+        }
+
+  - id: 5
+    title: Contains Duplicate
+    difficulty: easy
+    description: |
+      給定整數陣列 nums，若陣列中有任何值至少出現兩次，回傳 true；
+      若所有值都不相同，回傳 false。
+    examples:
+      - input: "nums = [1,2,3,1]"
+        output: "true"
+        explanation: "1 出現兩次"
+      - input: "nums = [1,2,3,4]"
+        output: "false"
+        explanation: "所有元素皆不重複"
+    constraints:
+      - "1 <= len(nums) <= 10^5"
+      - "-10^9 <= nums[i] <= 10^9"
+    starter_code:
+      python: |
+        def solve(nums):
+            pass
+      js: |
+        function solve(nums) {
+          return false;
+        }
+
+  # ── Two Pointers ─────────────────────────────────────────────
+
+  - id: 6
+    title: Valid Palindrome
+    difficulty: easy
+    description: |
+      給定字串 s，只考慮英文字母與數字，忽略大小寫，
+      判斷是否為迴文（從前讀與從後讀相同）。
+    examples:
+      - input: 's = "A man, a plan, a canal: Panama"'
+        output: "true"
+        explanation: '"amanaplanacanalpanama" 是迴文'
+      - input: 's = "race a car"'
+        output: "false"
+        explanation: '"raceacar" 不是迴文'
+    constraints:
+      - "1 <= len(s) <= 2 * 10^5"
+      - "s 只包含可列印 ASCII 字元"
+    starter_code:
+      python: |
+        def solve(s):
+            pass
+      js: |
+        function solve(s) {
+          return true;
+        }
+
+  - id: 7
+    title: Two Sum II – Input Array Is Sorted
+    difficulty: easy
+    description: |
+      給定一個已按升序排列的整數陣列 numbers（1-indexed），
+      找出兩個數使其和等於 target，回傳它們的索引 [index1, index2]（1-indexed）。
+      不可使用相同元素，且保證恰好有一組解。
+    examples:
+      - input: "numbers = [2,7,11,15], target = 9"
+        output: "[1,2]"
+        explanation: "numbers[0] + numbers[1] = 2 + 7 = 9"
+      - input: "numbers = [2,3,4], target = 6"
+        output: "[1,3]"
+        explanation: null
+    constraints:
+      - "2 <= len(numbers) <= 3 * 10^4"
+      - "-1000 <= numbers[i] <= 1000"
+      - "numbers 按非遞減順序排列"
+      - "只有一組有效答案"
+    starter_code:
+      python: |
+        def solve(numbers, target):
+            pass
+      js: |
+        function solve(numbers, target) {
+          return [];
+        }
+
+  - id: 8
+    title: Remove Duplicates from Sorted Array
+    difficulty: easy
+    description: |
+      給定已排序陣列 nums，原地刪除重複元素，使每個元素只出現一次，
+      回傳移除後陣列的新長度 k。
+      前 k 個元素需為去重後的結果，順序須保持不變。
+    examples:
+      - input: "nums = [1,1,2]"
+        output: "2"
+        explanation: "去重後前兩個元素為 [1,2]，回傳 2"
+      - input: "nums = [0,0,1,1,1,2,2,3,3,4]"
+        output: "5"
+        explanation: "去重後前五個元素為 [0,1,2,3,4]，回傳 5"
+    constraints:
+      - "1 <= len(nums) <= 3 * 10^4"
+      - "-100 <= nums[i] <= 100"
+      - "nums 按非遞減順序排列"
+    starter_code:
+      python: |
+        def solve(nums):
+            # 直接修改 nums，回傳新長度
+            pass
+      js: |
+        function solve(nums) {
+          // 直接修改 nums，回傳新長度
+          return 0;
+        }
+
+  - id: 9
+    title: 3Sum
+    difficulty: medium
+    description: |
+      給定整數陣列 nums，找出所有不重複的三元組 [nums[i], nums[j], nums[k]]
+      使得 i、j、k 互不相同，且 nums[i] + nums[j] + nums[k] == 0。
+      回傳所有符合條件的三元組（結果中不可有重複的三元組）。
+    examples:
+      - input: "nums = [-1,0,1,2,-1,-4]"
+        output: "[[-1,-1,2],[-1,0,1]]"
+        explanation: "索引 0,1,2 對應 -1+0+1=0；索引 0,3,4 對應 -1+2+-1=0"
+      - input: "nums = [0,0,0]"
+        output: "[[0,0,0]]"
+        explanation: null
+    constraints:
+      - "3 <= len(nums) <= 3000"
+      - "-10^5 <= nums[i] <= 10^5"
+    starter_code:
+      python: |
+        def solve(nums):
+            pass
+      js: |
+        function solve(nums) {
+          return [];
+        }
+
+  - id: 10
+    title: Container With Most Water
+    difficulty: medium
+    description: |
+      給定整數陣列 height，長度為 n，第 i 個元素代表座標 (i, height[i]) 的垂直線高度。
+      找出兩條線，使它們與 x 軸共同構成的容器可以容納最多的水，回傳最大容量。
+    examples:
+      - input: "height = [1,8,6,2,5,4,8,3,7]"
+        output: "49"
+        explanation: "選第 2 條線（高度 8）與第 9 條線（高度 7），寬度 7，容量 = 7 * 7 = 49"
+      - input: "height = [1,1]"
+        output: "1"
+        explanation: null
+    constraints:
+      - "2 <= len(height) <= 10^5"
+      - "0 <= height[i] <= 10^4"
+    starter_code:
+      python: |
+        def solve(height):
+            pass
+      js: |
+        function solve(height) {
+          return 0;
+        }
+
+  # ── Sliding Window ────────────────────────────────────────────
+
+  - id: 11
+    title: Maximum Average Subarray I
+    difficulty: easy
+    description: |
+      給定整數陣列 nums 與整數 k，找出長度為 k 的連續子陣列，
+      使其平均值最大，回傳該最大平均值。
+    examples:
+      - input: "nums = [1,12,-5,-6,50,3], k = 4"
+        output: "12.75"
+        explanation: "子陣列 [12,-5,-6,50] 的平均值 = 51/4 = 12.75"
+      - input: "nums = [5], k = 1"
+        output: "5.0"
+        explanation: null
+    constraints:
+      - "1 <= k <= len(nums) <= 10^5"
+      - "-10^4 <= nums[i] <= 10^4"
+    starter_code:
+      python: |
+        def solve(nums, k):
+            pass
+      js: |
+        function solve(nums, k) {
+          return 0.0;
+        }
+
+  - id: 12
+    title: Longest Substring Without Repeating Characters
+    difficulty: medium
+    description: |
+      給定字串 s，找出不含重複字元的最長子字串長度。
+    examples:
+      - input: 's = "abcabcbb"'
+        output: "3"
+        explanation: '"abc" 是長度為 3 的最長無重複子字串'
+      - input: 's = "bbbbb"'
+        output: "1"
+        explanation: '"b" 長度為 1'
+      - input: 's = "pwwkew"'
+        output: "3"
+        explanation: '"wke" 是長度為 3 的最長無重複子字串'
+    constraints:
+      - "0 <= len(s) <= 5 * 10^4"
+      - "s 由英文字母、數字、符號和空格組成"
+    starter_code:
+      python: |
+        def solve(s):
+            pass
+      js: |
+        function solve(s) {
+          return 0;
+        }
+
+  - id: 13
+    title: Minimum Size Subarray Sum
+    difficulty: medium
+    description: |
+      給定正整數 target 和正整數陣列 nums，找出總和 >= target 的最短連續子陣列長度。
+      若不存在，回傳 0。
+    examples:
+      - input: "target = 7, nums = [2,3,1,2,4,3]"
+        output: "2"
+        explanation: "子陣列 [4,3] 的總和 >= 7，長度為 2"
+      - input: "target = 4, nums = [1,4,4]"
+        output: "1"
+        explanation: "子陣列 [4] 的長度為 1"
+    constraints:
+      - "1 <= target <= 10^9"
+      - "1 <= len(nums) <= 10^5"
+      - "1 <= nums[i] <= 10^4"
+    starter_code:
+      python: |
+        def solve(target, nums):
+            pass
+      js: |
+        function solve(target, nums) {
+          return 0;
+        }
+
+  - id: 14
+    title: Fruit Into Baskets
+    difficulty: medium
+    description: |
+      給定整數陣列 fruits，fruits[i] 代表第 i 棵樹的水果種類。
+      你有兩個籃子，每個籃子只能裝一種水果，且容量無限。
+      從任意樹開始，每棵樹必須摘取恰好一個水果，遇到無法放入任何籃子的水果就停止。
+      回傳可以摘取的最多水果數量。
+    examples:
+      - input: "fruits = [1,2,1]"
+        output: "3"
+        explanation: "摘取所有水果 [1,2,1]，共 3 個"
+      - input: "fruits = [0,1,2,2]"
+        output: "3"
+        explanation: "摘取 [1,2,2]，共 3 個"
+      - input: "fruits = [1,2,3,2,2]"
+        output: "4"
+        explanation: "摘取 [2,3,2,2]，共 4 個"
+    constraints:
+      - "1 <= len(fruits) <= 10^5"
+      - "0 <= fruits[i] < len(fruits)"
+    starter_code:
+      python: |
+        def solve(fruits):
+            pass
+      js: |
+        function solve(fruits) {
+          return 0;
+        }
+
+  # ── Binary Search ─────────────────────────────────────────────
+
+  - id: 15
+    title: Binary Search
+    difficulty: easy
+    description: |
+      給定按升序排列的整數陣列 nums 與目標值 target，
+      實作二分搜尋，回傳 target 在陣列中的索引；若不存在，回傳 -1。
+      演算法時間複雜度需為 O(log n)。
+    examples:
+      - input: "nums = [-1,0,3,5,9,12], target = 9"
+        output: "4"
+        explanation: "9 存在於 nums，索引為 4"
+      - input: "nums = [-1,0,3,5,9,12], target = 2"
+        output: "-1"
+        explanation: "2 不存在於 nums"
+    constraints:
+      - "1 <= len(nums) <= 10^4"
+      - "-10^4 <= nums[i], target <= 10^4"
+      - "nums 所有元素不重複，且按升序排列"
+    starter_code:
+      python: |
+        def solve(nums, target):
+            pass
+      js: |
+        function solve(nums, target) {
+          return -1;
+        }
+
+  - id: 16
+    title: Search Insert Position
+    difficulty: easy
+    description: |
+      給定已排序且不含重複元素的整數陣列 nums 與目標值 target，
+      回傳 target 在陣列中的索引；若不存在，回傳其應被插入以保持順序的位置索引。
+      時間複雜度需為 O(log n)。
+    examples:
+      - input: "nums = [1,3,5,6], target = 5"
+        output: "2"
+        explanation: "5 存在於索引 2"
+      - input: "nums = [1,3,5,6], target = 2"
+        output: "1"
+        explanation: "2 應插入索引 1"
+      - input: "nums = [1,3,5,6], target = 7"
+        output: "4"
+        explanation: "7 應插入索引 4（末尾）"
+    constraints:
+      - "1 <= len(nums) <= 10^4"
+      - "-10^4 <= nums[i] <= 10^4"
+      - "nums 不含重複元素，按升序排列"
+    starter_code:
+      python: |
+        def solve(nums, target):
+            pass
+      js: |
+        function solve(nums, target) {
+          return 0;
+        }
+
+  - id: 17
+    title: Find Minimum in Rotated Sorted Array
+    difficulty: medium
+    description: |
+      已知一個長度為 n 的升序整數陣列在某個索引位置旋轉（0 <= k < n）。
+      給定旋轉後的陣列 nums（所有元素不重複），回傳陣列中的最小值。
+      時間複雜度需為 O(log n)。
+    examples:
+      - input: "nums = [3,4,5,1,2]"
+        output: "1"
+        explanation: "原陣列 [1,2,3,4,5] 在索引 3 旋轉"
+      - input: "nums = [4,5,6,7,0,1,2]"
+        output: "0"
+        explanation: "原陣列在索引 4 旋轉"
+      - input: "nums = [11,13,15,17]"
+        output: "11"
+        explanation: "未旋轉"
+    constraints:
+      - "1 <= len(nums) <= 5000"
+      - "-5000 <= nums[i] <= 5000"
+      - "nums 中所有元素不重複"
+    starter_code:
+      python: |
+        def solve(nums):
+            pass
+      js: |
+        function solve(nums) {
+          return 0;
+        }
+
+  # ── Linked List ───────────────────────────────────────────────
+
+  - id: 18
+    title: Reverse Linked List
+    difficulty: easy
+    description: |
+      給定單向鏈結串列的頭節點 head，將串列反轉後回傳新的頭節點。
+
+      節點定義：
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+    examples:
+      - input: "head = [1,2,3,4,5]"
+        output: "[5,4,3,2,1]"
+        explanation: null
+      - input: "head = [1,2]"
+        output: "[2,1]"
+        explanation: null
+    constraints:
+      - "節點數量範圍 [0, 5000]"
+      - "-5000 <= Node.val <= 5000"
+    starter_code:
+      python: |
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+
+        def solve(head):
+            pass
+      js: |
+        class ListNode {
+          constructor(val = 0, next = null) {
+            this.val = val;
+            this.next = next;
+          }
+        }
+        function solve(head) {
+          return null;
+        }
+
+  - id: 19
+    title: Merge Two Sorted Lists
+    difficulty: easy
+    description: |
+      給定兩個已排序的鏈結串列 list1 與 list2 的頭節點，
+      將兩個串列合併成一個排序好的串列並回傳。
+      合併後的串列應由這兩個串列的節點組成。
+
+      節點定義：
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+    examples:
+      - input: "list1 = [1,2,4], list2 = [1,3,4]"
+        output: "[1,1,2,3,4,4]"
+        explanation: null
+      - input: "list1 = [], list2 = []"
+        output: "[]"
+        explanation: null
+      - input: "list1 = [], list2 = [0]"
+        output: "[0]"
+        explanation: null
+    constraints:
+      - "兩個串列的節點數量均在 [0, 50] 範圍"
+      - "-100 <= Node.val <= 100"
+      - "list1 與 list2 均已排序"
+    starter_code:
+      python: |
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+
+        def solve(list1, list2):
+            pass
+      js: |
+        class ListNode {
+          constructor(val = 0, next = null) {
+            this.val = val;
+            this.next = next;
+          }
+        }
+        function solve(list1, list2) {
+          return null;
+        }
+
+  - id: 20
+    title: Linked List Cycle
+    difficulty: easy
+    description: |
+      給定鏈結串列的頭節點 head，判斷串列中是否存在環。
+      若某個節點可以從自身出發沿 next 指標再次到達，則存在環。
+      請使用 O(1) 記憶體解決此問題。
+
+      節點定義：
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+    examples:
+      - input: "head = [3,2,0,-4], pos = 1"
+        output: "true"
+        explanation: "尾節點的 next 指向索引 1 的節點，形成環"
+      - input: "head = [1,2], pos = 0"
+        output: "true"
+        explanation: "尾節點的 next 指向索引 0 的節點，形成環"
+      - input: "head = [1], pos = -1"
+        output: "false"
+        explanation: "串列中無環"
+    constraints:
+      - "節點數量範圍 [0, 10^4]"
+      - "-10^5 <= Node.val <= 10^5"
+      - "pos 為 -1 或有效索引"
+    starter_code:
+      python: |
+        class ListNode:
+            def __init__(self, val=0, next=None):
+                self.val = val
+                self.next = next
+
+        def solve(head):
+            pass
+      js: |
+        class ListNode {
+          constructor(val = 0, next = null) {
+            this.val = val;
+            this.next = next;
+          }
+        }
+        function solve(head) {
+          return false;
+        }

@@ -97,7 +97,7 @@ REST / API 用的 Pydantic 模型，與 ORM 分離。
 
 ---
 
-# Step 3-7：題庫 YAML + startup seed
+# Step 3-7：題庫 YAML + startup seed ✅
 
 - 依賴：`pyyaml`（加入 `pyproject.toml`）
 - 題目檔：`backend/data/questions.yaml`（從 `DEFAULT_QUESTIONS` 搬移並補 `difficulty`）
@@ -120,10 +120,10 @@ REST / API 用的 Pydantic 模型，與 ORM 分離。
 
 ---
 
-# Step 3-8：整合驗收測試
+# Step 3-8：整合驗收測試 ✅
 
 - pytest：migration → seed → 新 session 仍可 `list_all` / `get_random`
-- 驗收：Phase 3 完成標準——**重啟 / 新 session 後題庫仍可查詢，且與 YAML 一致**
+- 驗收：`tests/test_phase3_integration.py` — 新 session 題庫與 YAML 一致；重啟後再次 seed 仍冪等
 
 ---
 

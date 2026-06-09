@@ -2,6 +2,7 @@ from db.models import Question
 from db.migrate import file_database_url, upgrade_head
 from db.repositories import QuestionRepository
 from db.schemas import ExampleCaseRead, QuestionRead
+from db.seed import DEFAULT_QUESTIONS_PATH, load_questions_from_yaml, seed_questions
 from db.session import (
     Base,
     create_engine,
@@ -18,8 +19,11 @@ __all__ = [
     "QuestionRead",
     "create_engine",
     "create_session_factory",
+    "DEFAULT_QUESTIONS_PATH",
     "file_database_url",
     "get_session",
     "init_db",
+    "load_questions_from_yaml",
+    "seed_questions",
     "upgrade_head",
 ]

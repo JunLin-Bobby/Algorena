@@ -1,5 +1,6 @@
 """Async SQLite session infrastructure for repositories."""
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -39,4 +40,4 @@ async def init_db(engine: AsyncEngine) -> None:
     from db.migrate import upgrade_head
 
     database_url = engine.url.render_as_string(hide_password=False)
-    upgrade_head(database_url)
+    await asyncio.to_thread(upgrade_head, database_url)

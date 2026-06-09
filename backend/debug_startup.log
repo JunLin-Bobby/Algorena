@@ -1,0 +1,48 @@
+[18:49:29.895] [pid=72588] 
+[18:49:29.896] [pid=72588] === Algorena startup debug ===
+[18:49:29.896] [pid=72588] 
+[18:49:29.896] [pid=72588] === 0. Environment ===
+[18:49:29.896] [pid=72588] cwd=C:\Users\bobby\Documents\SideProjects\Algorena\backend
+[18:49:29.897] [pid=72588] python=C:\Users\bobby\Documents\SideProjects\Algorena\backend\.venv\Scripts\python.exe
+[18:49:29.897] [pid=72588] algorena.db exists=True size=16384
+[18:49:29.897] [pid=72588] algorena.db-wal exists=False
+[18:49:29.898] [pid=72588] algorena.db-shm exists=False
+[18:49:29.898] [pid=72588] algorena.db-journal exists=False
+[18:49:29.929] [pid=72588] port 8000: free
+[18:49:29.929] [pid=72588] START yaml
+[18:49:29.929] [pid=72588] 
+[18:49:29.929] [pid=72588] === 1. YAML load ===
+[18:49:30.330] [pid=72588] questions.yaml=C:\Users\bobby\Documents\SideProjects\Algorena\backend\data\questions.yaml
+[18:49:30.334] [pid=72588] loaded 3 questions; ids=[1, 2, 3]...
+[18:49:30.334] [pid=72588] OK    yaml (0.405s)
+[18:49:30.334] [pid=72588] START sync migrate
+[18:49:30.334] [pid=72588] 
+[18:49:30.334] [pid=72588] === 2. Sync Alembic upgrade_head ===
+[18:49:30.360] [pid=72588] database_url=sqlite+aiosqlite:///./algorena.db
+[18:49:30.378] [pid=72588] OK    sync migrate (0.043s)
+[18:49:30.378] [pid=72588] START init_db
+[18:49:30.378] [pid=72588] 
+[18:49:30.378] [pid=72588] === 3. await init_db (to_thread upgrade) ===
+[18:49:30.387] [pid=72588] OK    init_db (0.009s)
+[18:49:30.387] [pid=72588] START seed
+[18:49:30.387] [pid=72588] 
+[18:49:30.388] [pid=72588] === 4. await seed_questions ===
+[18:49:30.403] [pid=72588] questions in DB after seed: 3
+[18:49:30.404] [pid=72588] OK    seed (0.016s)
+[18:49:30.404] [pid=72588] START lifespan
+[18:49:30.404] [pid=72588] 
+[18:49:30.404] [pid=72588] === 5. Full lifespan (asyncio.run style) ===
+[18:49:31.055] [pid=72588] inside lifespan yield
+[18:49:31.055] [pid=72588] OK    lifespan (0.651s)
+[18:49:31.056] [pid=72588] START testclient
+[18:49:31.056] [pid=72588] 
+[18:49:31.056] [pid=72588] === 6. FastAPI TestClient ===
+[18:49:31.078] [pid=72588] GET / -> 200 {'Hello': 'World'}
+[18:49:31.081] [pid=72588] OK    testclient (0.024s)
+[18:49:31.081] [pid=72588] 
+[18:49:31.081] [pid=72588] === 7. Uvicorn subprocess (reload=False, timeout=20s) ===
+[18:49:31.081] [pid=72588] cmd=C:\Users\bobby\Documents\SideProjects\Algorena\backend\.venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
+[18:49:32.322] [pid=72588]   uvicorn | INFO:     Started server process [145540]
+[18:49:32.322] [pid=72588]   uvicorn | INFO:     Waiting for application startup.
+[18:49:32.340] [pid=72588]   uvicorn | INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+[18:49:32.340] [pid=72588]   uvicorn | INFO  [alembic.runtime.migration] Will assume non-transactional DDL.

@@ -11,8 +11,10 @@ from db.session import Base
 # alembic.ini 的設定物件
 config = context.config
 
-# 設定 logging
-if config.config_file_name is not None:
+# 設定 logging（程式化 upgrade 時 migrate.py 會設 configure_logger=False）
+if config.config_file_name is not None and config.attributes.get(
+    "configure_logger", True
+):
     fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
